@@ -1,0 +1,6 @@
+﻿@'
+streamlit==1.33.*
+pandas==2.0.3
+numpy==1.24.4
+nltk==3.8.1
+'
