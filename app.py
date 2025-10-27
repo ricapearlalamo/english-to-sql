@@ -18,9 +18,13 @@ from nltk import word_tokenize, pos_tag
 
 # Database
 import sqlite3
-import psycopg2
-import psycopg2.extras
 
+# ---- OPTIONAL Postgres import (won't crash if psycopg2 isn't installed) ----
+try:
+    import psycopg2  # noqa: F401
+    import psycopg2.extras  # noqa: F401
+except Exception:
+    psycopg2 = None  # sentinel so we can check later
 
 # ========= NLTK setup =========
 @lru_cache(maxsize=1)
@@ -29,6 +33,7 @@ def _download_nltk():
         nltk.data.find("tokenizers/punkt")
     except LookupError:
         nltk.download("punkt", quiet=True)
+    # Older tagger name still commonly used; if this errors you can switch to 'averaged_perceptron_tagger_eng'
     try:
         nltk.data.find("taggers/averaged_perceptron_tagger")
     except LookupError:
@@ -101,8 +106,12 @@ st.markdown(
 st.sidebar.header("Database Connection")
 db_type = st.sidebar.selectbox("Database Type", ["SQLite", "PostgreSQL"])
 
+# Seed paths/constants
+DEFAULT_SQLITE_PATH = "retail_demo.sqlite"
+SEED_FILE = "seed_sqlite.sql"
+
 if db_type == "SQLite":
-    sqlite_path = st.sidebar.text_input("SQLite File Path", value="retail_demo.sqlite")
+    sqlite_path = st.sidebar.text_input("SQLite File Path", value=DEFAULT_SQLITE_PATH)
 else:
     pg_host = st.sidebar.text_input("Database Host (IP or localhost)", value="localhost")
     pg_port = st.sidebar.text_input("Port", value="5432")
@@ -114,10 +123,32 @@ connect_btn = st.sidebar.button("Connect & Scan Schema")
 
 
 # ========= DB helpers =========
+def init_sqlite_if_needed(path: str, seed_sql: str = SEED_FILE):
+    """Create and seed SQLite database if missing."""
+    if not os.path.exists(path):
+        # Only create if seed file exists
+        if not os.path.exists(seed_sql):
+            raise FileNotFoundError(
+                f"SQLite DB '{path}' not found and seed file '{seed_sql}' is missing."
+            )
+        con = sqlite3.connect(path)
+        with open(seed_sql, "r", encoding="utf-8") as f:
+            con.executescript(f.read())
+        con.commit()
+        con.close()
+
 def get_connection():
     if db_type == "SQLite":
+        # Ensure DB exists and is seeded
+        init_sqlite_if_needed(sqlite_path, SEED_FILE)
         return sqlite3.connect(sqlite_path, check_same_thread=False)
     else:
+        if psycopg2 is None:
+            # User selected Postgres but driver isn't installed
+            raise RuntimeError(
+                "PostgreSQL selected but psycopg2 is not installed. "
+                "Either add 'psycopg2-binary==2.9.9' to requirements.txt or switch to SQLite."
+            )
         return psycopg2.connect(
             host=pg_host, port=int(pg_port), user=pg_user, password=pg_pass, dbname=pg_db
         )
@@ -175,7 +206,6 @@ for k, v in init_state.items():
 # ========= Connect =========
 if connect_btn:
     try:
-        # (Removed the "File exists: True" line)
         conn = get_connection()
         schema = get_schema(conn)
         date_min, date_max = fetch_min_max_dates(conn)
@@ -623,6 +653,7 @@ if st.session_state.get("schema"):
                         with sqlite3.connect(sqlite_path, check_same_thread=False) as _conn:
                             df = pd.read_sql_query(sql, _conn, params=params)
                     else:
+                        # Postgres path (requires psycopg2 + a live connection)
                         df = pd.read_sql_query(sql, st.session_state["conn"], params=params)
 
                     st.subheader("📊 Results")
