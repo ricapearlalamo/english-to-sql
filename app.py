@@ -712,3 +712,5 @@ else:
         '<div class="helper-note">🖥️ Connect to your database on the left to begin.</div>',
         unsafe_allow_html=True
     )
+    st.markdown(open("button_style.css").read(), unsafe_allow_html=True)
+

@@ -1,0 +1,45 @@
+﻿<style>
+/* Base look */
+.stButton > button {
+  background: #B9D9EB !important;   /* light blue */
+  color: #1f2937 !important;         /* dark text */
+  border: none !important;
+  border-radius: 10px !important;
+  padding: 8px 16px !important;
+  font-weight: 700 !important;
+  box-shadow: none !important;
+  transition: background 120ms ease, color 120ms ease !important;
+}
+/* Hover: darker bg + light text */
+.stButton > button:hover {
+  background: #3A8CCB !important;    /* darker blue */
+  color: #ffffff !important;          /* light text */
+}
+/* Focus/Active/Pressed: darkest bg + light text */
+.stButton > button:focus,
+.stButton > button:active {
+  background: #1E74B2 !important;    /* even darker blue */
+  color: #ffffff !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+/* Disabled state */
+.stButton > button:disabled {
+  background: #cfe4f2 !important;
+  color: #6b7280 !important;          /* gray-500 */
+}
+/* Sidebar buttons */
+div[data-testid="stSidebar"] .stButton > button {
+  background: #B9D9EB !important;
+  color: #1f2937 !important;
+}
+div[data-testid="stSidebar"] .stButton > button:hover {
+  background: #3A8CCB !important;
+  color: #ffffff !important;
+}
+div[data-testid="stSidebar"] .stButton > button:focus,
+div[data-testid="stSidebar"] .stButton > button:active {
+  background: #1E74B2 !important;
+  color: #ffffff !important;
+}
+</style>
