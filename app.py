@@ -132,6 +132,32 @@ div[data-testid="stSidebar"] .stButton > button:disabled {
   font-size:1.05rem;
   color:#1f2937CC;            /* 80% opacity */
 }
+            
+/* Bigger, bolder hero sentence under the title */
+.app-hero{
+  font-size: 1.28rem;      /* bigger */
+  font-weight: 800;        /* extra bold */
+  color: #1f2937;          /* gray-800 */
+  letter-spacing: .2px;
+  line-height: 1.35;
+  margin: 2px 0 10px 0;
+}
+
+/* Inline connected line (no box), a bit bigger & bold */
+.connected-inline{
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  font-size: 1.12rem;
+  font-weight: 750;
+  color: #14532D;          /* deep green to match ✅ vibe */
+}
+
+/* Emoji sizing so it doesn't look tiny */
+.connected-inline .emoji{
+  font-size: 1.15rem;
+  line-height: 1;
+}
 </style>
 """, unsafe_allow_html=True)
 
@@ -260,13 +286,10 @@ if connect_btn:
         st.session_state["date_max"] = date_max
 
         st.markdown(
-            f"""
-            <div class="banner">
-                ✅ Connected! Found {len(schema)} table(s)
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
+    f'<div class="connected-inline"><span class="emoji">✅</span>Connected! Found <strong>{len(schema)}</strong> table(s)</div>',
+    unsafe_allow_html=True
+)
+
     except Exception as e:
         st.error(f"Connection/Schema error: {e}")
 
