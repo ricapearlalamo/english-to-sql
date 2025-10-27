@@ -101,6 +101,37 @@ div[data-testid="stSidebar"] .stButton > button:disabled {
   color: #9CA3AF !important;        /* gray text */
   opacity: 1 !important;
 }
+            
+/* --- Connect callout --- */
+.connect-callout{
+  display:flex; align-items:center; gap:16px;
+  background: linear-gradient(135deg,#EAF4FB 0%, #B9D9EB 100%);
+  border:1px solid #A8CBE0;
+  border-radius:14px;
+  padding:18px 22px;
+  max-width:720px;
+  margin-top:12px;
+  box-shadow: 0 6px 18px rgba(75,156,211,.18);
+}
+
+.connect-callout .icon{
+  font-size:40px; line-height:1;
+  filter: drop-shadow(0 2px 6px rgba(75,156,211,.25));
+}
+
+.connect-callout .title{
+  font-weight:800;            /* extra bold */
+  font-size:1.6rem;           /* bigger */
+  color:#1f2937;              /* gray-800 */
+  letter-spacing:.2px;
+  margin-bottom:2px;
+}
+
+.connect-callout .subtitle{
+  font-weight:600;
+  font-size:1.05rem;
+  color:#1f2937CC;            /* 80% opacity */
+}
 </style>
 """, unsafe_allow_html=True)
 
@@ -721,11 +752,22 @@ if st.session_state.get("schema"):
                 except Exception as e:
                     st.error(f"Query execution error: {e}")
 else:
-    # Bigger, borderless helper (with emoji)
     st.markdown(
-        '<div class="helper-note"> 🖥️ Connect to your database on the left to begin.</div>',
-        unsafe_allow_html=True
-    )
+    """
+    <div class="connect-callout">
+      <div class="icon">🖥️</div>
+      <div class="content">
+        <div class="title">Connect to your database to begin</div>
+        <div class="subtitle">
+          Use the controls on the left, then click <b>Connect &amp; Scan Schema</b> to get instant SQL and insights.
+        </div>
+      </div>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
+
+
    
 
 
