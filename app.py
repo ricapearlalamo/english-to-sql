@@ -111,7 +111,7 @@ st.markdown("""
 
 st.title("🥤English-to-SQL Translator — Restaurant / Café Edition")
 st.markdown(
-    '<div class="app-hero">Ask business questions in plain English â€” get instant SQL and insights from the CafÃ© dataset.</div>',
+    '<div class="app-hero">Ask business questions in plain English — get instant SQL and insights from the Café dataset.</div>',
     unsafe_allow_html=True
 )
 
@@ -648,7 +648,7 @@ if st.session_state.get("schema"):
         if cols[i % 3].button(q, key=f"q_{i}"):
             st.session_state["prefill"] = q
 
-    st.subheader("ðŸ’¬ Ask a Business Question")
+    st.subheader("💬 Ask a Business Question")
     default_q = st.session_state.get("prefill", SAMPLE_QUESTIONS[0])
     question = st.text_input("Type your question or pick a sample above:", value=default_q)
     run_click = st.button("Translate & Run SQL", key="run_main")
