@@ -55,13 +55,61 @@ def tokenize_and_tag(q: str):
 
 # ========= Page =========
 st.set_page_config(page_title="Cafe BI: English to SQL", layout="wide")
+st.markdown("""
+<style>
+/* --- Buttons: keep your blue palette --- */
+
+/* Main + Sidebar default state */
+.stButton > button,
+div[data-testid="stSidebar"] .stButton > button {
+  background: #B9D9EB !important;   /* light blue */
+  color: #1f2937 !important;         /* dark text */
+  border: none !important;
+  border-radius: 10px !important;
+  padding: 8px 16px !important;
+  font-weight: 700 !important;
+  box-shadow: none !important;
+  transition: background-color 120ms ease, color 120ms ease !important;
+}
+
+/* Hover: darker blue + white text */
+.stButton > button:hover,
+div[data-testid="stSidebar"] .stButton > button:hover {
+  background: #4B9CD3 !important;   /* darker blue (same as your old hover) */
+  color: #FFFFFF !important;         /* light text */
+}
+
+/* Pressed/Active/Focus: slightly darker than hover + white text */
+.stButton > button:active,
+.stButton > button:focus,
+.stButton > button:focus-visible,
+.stButton > button[aria-pressed="true"],
+div[data-testid="stSidebar"] .stButton > button:active,
+div[data-testid="stSidebar"] .stButton > button:focus,
+div[data-testid="stSidebar"] .stButton > button:focus-visible,
+div[data-testid="stSidebar"] .stButton > button[aria-pressed="true"] {
+  background: #3A88C5 !important;   /* pressed shade */
+  color: #FFFFFF !important;         /* keep text light */
+  outline: none !important;
+  box-shadow: none !important;
+}
+
+/* Disabled state */
+.stButton > button:disabled,
+div[data-testid="stSidebar"] .stButton > button:disabled {
+  background: #E5F0F8 !important;   /* pale blue */
+  color: #9CA3AF !important;        /* gray text */
+  opacity: 1 !important;
+}
+</style>
+""", unsafe_allow_html=True)
 
 # Minimal styling: blue buttons + a nicer helper when disconnected
 st.markdown("""
 <style>\n/\*\ ---\ Unified\ Button\ Styling\ \(Main\ \+\ Sidebar\)\ ---\ \*/\n\.stButton\ >\ button,\ndiv\[data-testid="stSidebar"]\ \.stButton\ >\ button\ \{\n\ \ background:\ \#B9D9EB\ !important;\ \ \ \ /\*\ light\ blue\ \*/\n\ \ color:\ \#1f2937\ !important;\ \ \ \ \ \ \ \ \ \ /\*\ dark\ text\ \*/\n\ \ border:\ none\ !important;\n\ \ border-radius:\ 10px\ !important;\n\ \ padding:\ 8px\ 16px\ !important;\n\ \ font-weight:\ 700\ !important;\n\ \ box-shadow:\ none\ !important;\n\ \ transition:\ background-color\ 120ms\ ease,\ color\ 120ms\ ease\ !important;\n}\n/\*\ Hover\ =\ darker\ background\ \+\ light\ text\ \*/\n\.stButton\ >\ button:hover,\ndiv\[data-testid="stSidebar"]\ \.stButton\ >\ button:hover\ \{\n\ \ background:\ \#4B9CD3\ !important;\ \ \ \ \ /\*\ darker\ blue\ \*/\n\ \ color:\ \#FFFFFF\ !important;\ \ \ \ \ \ \ \ \ \ \ /\*\ light\ text\ \*/\n}\n/\*\ Active/Pressed/Focus\ =\ same\ darker\ background\ \+\ light\ text\ \(no\ red\ flash\)\ \*/\n\.stButton\ >\ button:active,\n\.stButton\ >\ button:focus,\n\.stButton\ >\ button:focus-visible,\n\.stButton\ >\ button\[aria-pressed="true"],\ndiv\[data-testid="stSidebar"]\ \.stButton\ >\ button:active,\ndiv\[data-testid="stSidebar"]\ \.stButton\ >\ button:focus,\ndiv\[data-testid="stSidebar"]\ \.stButton\ >\ button:focus-visible,\ndiv\[data-testid="stSidebar"]\ \.stButton\ >\ button\[aria-pressed="true"]\ \{\n\ \ background:\ \#3A88C5\ !important;\ \ \ \ \ /\*\ slightly\ darker\ than\ hover\ for\ pressed\ \*/\n\ \ color:\ \#FFFFFF\ !important;\ \ \ \ \ \ \ \ \ \ \ /\*\ keep\ text\ light\ \*/\n\ \ outline:\ none\ !important;\n\ \ box-shadow:\ none\ !important;\n}\n/\*\ Disabled\ state\ \*/\n\.stButton\ >\ button:disabled,\ndiv\[data-testid="stSidebar"]\ \.stButton\ >\ button:disabled\ \{\n\ \ background:\ \#E5F0F8\ !important;\ \ \ \ \ /\*\ pale\ blue\ \*/\n\ \ color:\ \#9CA3AF\ !important;\ \ \ \ \ \ \ \ \ \ /\*\ gray\ text\ \*/\n\ \ opacity:\ 1\ !important;\n}\n</style>
 """, unsafe_allow_html=True)
 
-st.title("ðŸ¥¤English-to-SQL Translator â€” Restaurant / CafÃ© Edition")
+st.title("🥤English-to-SQL Translator — Restaurant / Café Edition")
 st.markdown(
     '<div class="app-hero">Ask business questions in plain English â€” get instant SQL and insights from the CafÃ© dataset.</div>',
     unsafe_allow_html=True
@@ -183,7 +231,7 @@ if connect_btn:
         st.markdown(
             f"""
             <div class="banner">
-                âœ… Connected! Found {len(schema)} table(s)
+                ✅ Connected! Found {len(schema)} table(s)
             </div>
             """,
             unsafe_allow_html=True
@@ -594,7 +642,7 @@ if st.session_state.get("schema"):
         "yearly revenue by category",
     ]
 
-    st.subheader("ðŸ’¡ Sample Questions")
+    st.subheader("💡Sample Questions")
     cols = st.columns(3)
     for i, q in enumerate(SAMPLE_QUESTIONS):
         if cols[i % 3].button(q, key=f"q_{i}"):
@@ -622,12 +670,12 @@ if st.session_state.get("schema"):
                         # Postgres path (requires psycopg2 + a live connection)
                         df = pd.read_sql_query(sql, st.session_state["conn"], params=params)
 
-                    st.subheader("ðŸ“Š Results")
+                    st.subheader("📊 Results")
                     st.dataframe(df, use_container_width=True)
 
                     if not df.empty:
                         st.download_button(
-                            "ðŸ“¥ Download results as CSV",
+                            "📥 Download results as CSV",
                             df.to_csv(index=False).encode("utf-8"),
                             "results.csv", "text/csv", key="dl_csv_q"
                         )
@@ -675,9 +723,9 @@ if st.session_state.get("schema"):
 else:
     # Bigger, borderless helper (with emoji)
     st.markdown(
-        '<div class="helper-note">ðŸ–¥ï¸ Connect to your database on the left to begin.</div>',
+        '<div class="helper-note"> 🖥️ Connect to your database on the left to begin.</div>',
         unsafe_allow_html=True
     )
-    st.markdown(open("button_style.css").read(), unsafe_allow_html=True)
+   
 
 
