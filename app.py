@@ -1,5 +1,5 @@
-# app.py
-# English-to-SQL Translator (NLTK) — Restaurant / Café Edition
+﻿# app.py
+# English-to-SQL Translator (NLTK) â€” Restaurant / CafÃ© Edition
 # Supports: monthly / quarterly / yearly, "January 2025", "Q4 2025", "in 2024", and explicit date between
 # Works with SQLite (default) or PostgreSQL
 
@@ -58,46 +58,12 @@ st.set_page_config(page_title="Cafe BI: English to SQL", layout="wide")
 
 # Minimal styling: blue buttons + a nicer helper when disconnected
 st.markdown("""
-<style>
-/* Buttons */
-.stButton > button {
-  background: #B9D9EB;
-  color: #1f2937;
-  border: none;
-  border-radius: 10px;
-  padding: 8px 16px;
-  font-weight: 700;
-}
-.stButton > button:hover { background: #4B9CD3; color: #fff; }
-div[data-testid="stSidebar"] .stButton > button { background: #B9D9EB !important; color:#1f2937 !important; }
-div[data-testid="stSidebar"] .stButton > button:hover { background:#4B9CD3 !important; color:#fff !important; }
-
-/* Bigger, borderless helper text shown when not connected */
-.helper-note {
-  margin-top: 1rem;
-  color: #1f2937;            /* gray-800 */
-  font-weight: 600;
-  font-size: 1.125rem;       /* ~18px */
-  display: inline-flex;
-  gap: .5rem;
-  align-items: center;
-}
-
-/* Light-blue banner */
-.banner {
-  background-color: #B9D9EB;
-  color: #1f2937;
-  padding: 10px 16px;
-  border-radius: 8px;
-  font-weight: 600;
-  margin-top: 10px;
-}
-</style>
+<style>\n/\*\ ---\ Unified\ Button\ Styling\ \(Main\ \+\ Sidebar\)\ ---\ \*/\n\.stButton\ >\ button,\ndiv\[data-testid="stSidebar"]\ \.stButton\ >\ button\ \{\n\ \ background:\ \#B9D9EB\ !important;\ \ \ \ /\*\ light\ blue\ \*/\n\ \ color:\ \#1f2937\ !important;\ \ \ \ \ \ \ \ \ \ /\*\ dark\ text\ \*/\n\ \ border:\ none\ !important;\n\ \ border-radius:\ 10px\ !important;\n\ \ padding:\ 8px\ 16px\ !important;\n\ \ font-weight:\ 700\ !important;\n\ \ box-shadow:\ none\ !important;\n\ \ transition:\ background-color\ 120ms\ ease,\ color\ 120ms\ ease\ !important;\n}\n/\*\ Hover\ =\ darker\ background\ \+\ light\ text\ \*/\n\.stButton\ >\ button:hover,\ndiv\[data-testid="stSidebar"]\ \.stButton\ >\ button:hover\ \{\n\ \ background:\ \#4B9CD3\ !important;\ \ \ \ \ /\*\ darker\ blue\ \*/\n\ \ color:\ \#FFFFFF\ !important;\ \ \ \ \ \ \ \ \ \ \ /\*\ light\ text\ \*/\n}\n/\*\ Active/Pressed/Focus\ =\ same\ darker\ background\ \+\ light\ text\ \(no\ red\ flash\)\ \*/\n\.stButton\ >\ button:active,\n\.stButton\ >\ button:focus,\n\.stButton\ >\ button:focus-visible,\n\.stButton\ >\ button\[aria-pressed="true"],\ndiv\[data-testid="stSidebar"]\ \.stButton\ >\ button:active,\ndiv\[data-testid="stSidebar"]\ \.stButton\ >\ button:focus,\ndiv\[data-testid="stSidebar"]\ \.stButton\ >\ button:focus-visible,\ndiv\[data-testid="stSidebar"]\ \.stButton\ >\ button\[aria-pressed="true"]\ \{\n\ \ background:\ \#3A88C5\ !important;\ \ \ \ \ /\*\ slightly\ darker\ than\ hover\ for\ pressed\ \*/\n\ \ color:\ \#FFFFFF\ !important;\ \ \ \ \ \ \ \ \ \ \ /\*\ keep\ text\ light\ \*/\n\ \ outline:\ none\ !important;\n\ \ box-shadow:\ none\ !important;\n}\n/\*\ Disabled\ state\ \*/\n\.stButton\ >\ button:disabled,\ndiv\[data-testid="stSidebar"]\ \.stButton\ >\ button:disabled\ \{\n\ \ background:\ \#E5F0F8\ !important;\ \ \ \ \ /\*\ pale\ blue\ \*/\n\ \ color:\ \#9CA3AF\ !important;\ \ \ \ \ \ \ \ \ \ /\*\ gray\ text\ \*/\n\ \ opacity:\ 1\ !important;\n}\n</style>
 """, unsafe_allow_html=True)
 
-st.title("🥤English-to-SQL Translator — Restaurant / Café Edition")
+st.title("ðŸ¥¤English-to-SQL Translator â€” Restaurant / CafÃ© Edition")
 st.markdown(
-    '<div class="app-hero">Ask business questions in plain English — get instant SQL and insights from the Café dataset.</div>',
+    '<div class="app-hero">Ask business questions in plain English â€” get instant SQL and insights from the CafÃ© dataset.</div>',
     unsafe_allow_html=True
 )
 
@@ -217,7 +183,7 @@ if connect_btn:
         st.markdown(
             f"""
             <div class="banner">
-                ✅ Connected! Found {len(schema)} table(s)
+                âœ… Connected! Found {len(schema)} table(s)
             </div>
             """,
             unsafe_allow_html=True
@@ -385,7 +351,7 @@ def extract_period_filters(text: str):
     return where_parts, params, inferred_bucket, single_year
 
 
-# ========= English → SQL =========
+# ========= English â†’ SQL =========
 def detect_orders_count(text: str) -> bool:
     t = text.lower()
     return bool(
@@ -416,7 +382,7 @@ def build_join_sql(question_text, tokens, agg, where_clause):
 
     lbl, grp, ordk, alias = period_expressions(bucket)
 
-    # "date between … and …"
+    # "date between â€¦ and â€¦"
     m = re.search(r"date\s+between\s+(\d{4}-\d{2}-\d{2})\s+and\s+(\d{4}-\d{2}-\d{2})", question_text.lower())
     extra_between = None
     params = []
@@ -628,13 +594,13 @@ if st.session_state.get("schema"):
         "yearly revenue by category",
     ]
 
-    st.subheader("💡 Sample Questions")
+    st.subheader("ðŸ’¡ Sample Questions")
     cols = st.columns(3)
     for i, q in enumerate(SAMPLE_QUESTIONS):
         if cols[i % 3].button(q, key=f"q_{i}"):
             st.session_state["prefill"] = q
 
-    st.subheader("💬 Ask a Business Question")
+    st.subheader("ðŸ’¬ Ask a Business Question")
     default_q = st.session_state.get("prefill", SAMPLE_QUESTIONS[0])
     question = st.text_input("Type your question or pick a sample above:", value=default_q)
     run_click = st.button("Translate & Run SQL", key="run_main")
@@ -656,12 +622,12 @@ if st.session_state.get("schema"):
                         # Postgres path (requires psycopg2 + a live connection)
                         df = pd.read_sql_query(sql, st.session_state["conn"], params=params)
 
-                    st.subheader("📊 Results")
+                    st.subheader("ðŸ“Š Results")
                     st.dataframe(df, use_container_width=True)
 
                     if not df.empty:
                         st.download_button(
-                            "📥 Download results as CSV",
+                            "ðŸ“¥ Download results as CSV",
                             df.to_csv(index=False).encode("utf-8"),
                             "results.csv", "text/csv", key="dl_csv_q"
                         )
@@ -709,8 +675,9 @@ if st.session_state.get("schema"):
 else:
     # Bigger, borderless helper (with emoji)
     st.markdown(
-        '<div class="helper-note">🖥️ Connect to your database on the left to begin.</div>',
+        '<div class="helper-note">ðŸ–¥ï¸ Connect to your database on the left to begin.</div>',
         unsafe_allow_html=True
     )
     st.markdown(open("button_style.css").read(), unsafe_allow_html=True)
+
 
